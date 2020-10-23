@@ -8,7 +8,6 @@ import signal
 import datetime
 import sys
 
-#TEST
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
 app = Flask(__name__)
