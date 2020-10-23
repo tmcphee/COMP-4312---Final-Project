@@ -16,6 +16,7 @@ app.config['SECRET_KEY'] = 'comp4312'
 CORS(app)  # needed for cross-domain requests, allow everything by default
 
 
+
 def sigterm_handler(_signo, _stack_frame):
     print(str(datetime.datetime.now()) + ': Received SIGTERM')
 
@@ -63,10 +64,15 @@ def application():
     return render_template('application.html', content=content)
 
 
-@app.route('/run')
+@app.route('/run', methods=('GET', 'POST'))
 def run():
-    content = "run page test"
-    return render_template('run.html', content=content)
+    content = ""
+    if request.method == 'POST':
+        content = request.form['input']
+        print(content)
+
+    table = "generate a table from SQL DB here"
+    return render_template('run.html', content=content, table=table)
 
 
 if __name__ == '__main__':

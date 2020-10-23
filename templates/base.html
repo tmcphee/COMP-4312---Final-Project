@@ -3,16 +3,21 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="{{ url_for('static', filename = 'images/hotel.png') }}">
+        <title>Hotel Review Analyzer</title>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-4.0.css') }}" crossorigin="anonymous">
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename = 'js/bootstrap-4.0.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename = 'js/jquery-3.5.1.js') }}" crossorigin="anonymous"></script>
 
     </head>
     <body>
         <nav class="navbar navbar-dark bg-dark navbar-expand">
-            <a class="navbar-brand" href="/">Title</a>
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename = 'images/hotel.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+                Hotel Review Analyzer
+            </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav flex-row float-right">
                     <li class="nav-item active">
@@ -27,8 +32,8 @@
                 </ul>
             </div>
         </nav>
-        <div class="container">
-            {% block content %} {% endblock %}
-        </div>
+
+        {% block content %} {% endblock %}
+
     </body>
 </html>
