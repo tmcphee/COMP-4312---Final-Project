@@ -7,6 +7,7 @@ from flask_cors import CORS
 import signal
 import datetime
 import sys
+#from SQL import *
 
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
@@ -69,9 +70,32 @@ def run():
     if request.method == 'POST':
         content = request.form['input']
         print(content)
+        #sql_insert("INSERT INTO Reviews (Description, Response) VALUES ('" + content + "', 1)")
 
     table = "generate a table from SQL DB here"
+    #table = make_table("SELECT * FROM Reviews order by id desc LIMIT 3")
     return render_template('run.html', content=content, table=table)
+
+#Works comment out so no need to start DB everytime
+'''
+def make_table(query):
+    table = ""
+    query = sql_select(query)
+    for x in query:
+        x = sql_format_response(x)
+        table += "<tr>"
+        table += "<td>" + x[1] + "</td>"
+        table += "<td>" + yes_no(x[2]) + "</td>"
+        table += "</tr>"
+    return table
+'''
+
+
+def yes_no(value):
+    if value==1:
+        return "Happy"
+    else:
+        return "Not Happy"
 
 
 if __name__ == '__main__':

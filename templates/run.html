@@ -21,7 +21,17 @@
                 <div class="card">
                     <h5 class="card-header">Stored Reviews</h5>
                     <div class="card-body">
-                        {{ table }}
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                  <th scope="col">Description</th>
+                                  <th scope="col">Response</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ table|safe }}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

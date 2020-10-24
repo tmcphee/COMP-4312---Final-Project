@@ -3,7 +3,7 @@ import pymysql.cursors
 #cloud_sql_proxy -instances=<INSTANCE_NAME>>=tcp:3306 -credential_file=credentials.json &
 
 connection = pymysql.connect(host='127.0.0.1',
-                             user='admin',
+                             user='root',
                              password='comp4312admin',
                              db='hotel_reviews')
 
@@ -23,6 +23,12 @@ def sql_select(query):
         return cursor.fetchall()
     except Exception as e:
         print("Exeception occured:{}".format(e))
+
+
+def sql_format_response(content):
+    data = [content[0], str(content[1])[2:-1], content[2]]
+    return data
+
 
 sql_insert("DROP TABLE Reviews")
 sql_insert("CREATE TABLE Reviews(id int NOT NULL AUTO_INCREMENT, Description BLOB NOT NULL, Response int(1) NOT NULL, PRIMARY KEY (id))")
