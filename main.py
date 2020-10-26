@@ -16,7 +16,6 @@ app.config['SECRET_KEY'] = 'comp4312'
 CORS(app)  # needed for cross-domain requests, allow everything by default
 
 
-
 def sigterm_handler(_signo, _stack_frame):
     print(str(datetime.datetime.now()) + ': Received SIGTERM')
 
@@ -64,6 +63,16 @@ def application():
     return render_template('application.html', content=content)
 
 
+@app.route('/archive', methods=('GET', 'POST'))
+def response():
+    if request.method == 'POST':
+        content = request.form['Delete']
+        sql_insert("DELETE FROM Reviews WHERE id=" + content)
+
+    table = make_table_response("SELECT * FROM Reviews order by id desc")
+    return render_template('response.html', table=table)
+
+
 @app.route('/run', methods=('GET', 'POST'))
 def run():
     content = ""
@@ -85,6 +94,20 @@ def make_table(query):
         table += "<tr>"
         table += "<td>" + x[1] + "</td>"
         table += "<td>" + yes_no(x[2]) + "</td>"
+        table += "</tr>"
+    return table
+
+
+def make_table_response(query):
+    table = ""
+    query = sql_select(query)
+    for x in query:
+        x = sql_format_response(x)
+        table += "<tr>"
+        table += "<td>" + x[1] + "</td>"
+        table += "<td>" + yes_no(x[2]) + "</td>"
+        table += "<td><form method=\"post\"><button type=\"submit\" class=\"btn btn-danger\" name=\"Delete\"value="\
+                 + str(x[0]) + ">Delete</button></form></td>"
         table += "</tr>"
     return table
 

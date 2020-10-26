@@ -34,7 +34,7 @@ def sql_format_response(content):
     return data
 
 
-sql_insert("DROP TABLE Reviews")
+#sql_insert("DROP TABLE Reviews")
 sql_insert("CREATE TABLE Reviews(id int NOT NULL AUTO_INCREMENT, Description BLOB NOT NULL, Response int(1) NOT NULL, PRIMARY KEY (id))")
 
 #TEST CASES

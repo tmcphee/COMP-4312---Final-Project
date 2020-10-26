@@ -1,0 +1,26 @@
+{% extends 'base.html' %} 
+{% block content %}
+    <br>
+	<div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <h5 class="card-header">Archived Reviews</h5>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Response</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ table|safe }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %} 
