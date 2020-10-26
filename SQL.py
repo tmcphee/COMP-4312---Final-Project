@@ -2,10 +2,13 @@ import pymysql.cursors
 
 #cloud_sql_proxy -instances=<INSTANCE_NAME>>=tcp:3306 -credential_file=credentials.json &
 
-connection = pymysql.connect(host='127.0.0.1',
+try:
+    connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='comp4312admin',
                              db='hotel_reviews')
+except Exception as e:
+    print("SQL ERROR - Exeception occured:{}".format(e))
 
 
 def sql_insert(query):
@@ -13,7 +16,7 @@ def sql_insert(query):
         cursor = connection.cursor()
         cursor.execute(query)
     except Exception as e:
-        print("Exeception occured:{}".format(e))
+        print("SQL ERROR - Exeception occured:{}".format(e))
 
 
 def sql_select(query):
@@ -22,7 +25,8 @@ def sql_select(query):
         cursor.execute(query)
         return cursor.fetchall()
     except Exception as e:
-        print("Exeception occured:{}".format(e))
+        print("SQL ERROR - Exeception occured:{}".format(e))
+        return [["NA", "**NA*", "NA"]]
 
 
 def sql_format_response(content):
