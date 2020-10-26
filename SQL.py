@@ -26,7 +26,7 @@ def sql_select(query):
         return cursor.fetchall()
     except Exception as e:
         print("SQL ERROR - Exeception occured:{}".format(e))
-        return [["NA", "**NA*", "NA"]]
+        return [["NA", "**MySQL DB OFFLINE*", "NA"]]
 
 
 def sql_format_response(content):
