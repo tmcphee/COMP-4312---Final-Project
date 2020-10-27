@@ -100,5 +100,10 @@ if __name__ == '__main__':
     """
     kill -9 $(lsof -i:5000 -t) 2> /dev/null
     """
+    # Default Host
+    host = "127.0.0.1"
+    # Allow for alternate host in Dockerfile
+    if len(sys.argv) == 2:
+        host = sys.argv[1]
     # app.run(debug=True)
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host=host, port=8080, debug=True)
