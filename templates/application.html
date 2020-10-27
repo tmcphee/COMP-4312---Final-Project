@@ -1,4 +1,41 @@
 {% extends 'base.html' %} 
 {% block content %} 
-	{{ content }}
+	<br>
+	    <div class="container">
+		 <div class="card">
+		     <h5 class="card-header">Application Purpose</h5>
+		     <div class="card-body">
+			 <p class="card-text">The purpose of our application is to process a review to determine if it is a good or bad review for a hotel. Using machine learning, this application is able to determine what is considered a good or bad review based on the language used in the review.</p>
+		     </div>
+		 </div>
+		<br>
+		 <div class="card">
+		     <h5 class="card-header">Dataset</h5>
+		     <div class="card-body">
+			 <p class="card-text">Hotel Review Analyzer uses a dataset from a popular hotel review site where its users have provided online reviews for a single hotel. This dataset contains a variety of different reviews good and bad for this particular hotel. This dataset contains the exact quote from the reviewer and whether they were satisfied or not with their stay. We retrieved this free dataset from Kaggle for the purpose of completing the final project for COMP-4312. We have removed the unnecessary items such as customer ID, device type they used for the review, and browser they used for the review as these are not needed for the purpose of our application.</p>
+		     </div>
+		 </div>
+		<br>
+		 <div class="card">
+		     <h5 class="card-header">Functionalities</h5>
+		     <div class="card-body">
+			 <h5 class="card-title">Function1</h5>
+			 <p class="card-text">Stuff Here</p>
+			 <h5 class="card-title">Function2</h5>
+			 <p class="card-text">Stuff Here</p>
+
+		     </div>
+		 </div>
+		 <br>
+		 <div class="card">
+		     <h5 class="card-header">Machine Learning Algorithms</h5>
+		     <div class="card-body">
+			 <p class="card-text">Stuff Here</p>
+		     </div>
+		 </div>
+		<br>
+
+		<br>
+	     </div>
+
 {% endblock %} 
