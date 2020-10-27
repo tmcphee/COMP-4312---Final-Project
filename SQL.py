@@ -26,7 +26,7 @@ def sql_select(query):
         return cursor.fetchall()
     except Exception as e:
         print("SQL ERROR - Exeception occured:{}".format(e))
-        return [["NA", "**NA*", "NA"]]
+        return [["NA", "**MySQL DB OFFLINE*", "NA"]]
 
 
 def sql_format_response(content):
@@ -34,7 +34,7 @@ def sql_format_response(content):
     return data
 
 
-sql_insert("DROP TABLE Reviews")
+#sql_insert("DROP TABLE Reviews")
 sql_insert("CREATE TABLE Reviews(id int NOT NULL AUTO_INCREMENT, Description BLOB NOT NULL, Response int(1) NOT NULL, PRIMARY KEY (id))")
 
 #TEST CASES
