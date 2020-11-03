@@ -76,14 +76,19 @@ def response():
 @app.route('/run', methods=('GET', 'POST'))
 def run():
     content = ""
+    result = ""
     if request.method == 'POST':
         content = request.form['input']
+        # ---------------Machine-Learning-Here---------------
         print(content)
-        sql_insert("INSERT INTO Reviews (Description, Response) VALUES ('" + content + "', happy_not_toint('Happy'))")
+        result = "Happy"
+        # ---------------------------------------------------
+        sql_insert("INSERT INTO Reviews (Description, Response) "
+                   "VALUES ('" + content + "', " + str(happy_not_toint(result)) + ")")
+        result = "Result: " + result
 
-    table = "generate a table from SQL DB here"
     table = make_table("SELECT * FROM Reviews order by id desc LIMIT 3")
-    return render_template('run.html', content=content, table=table)
+    return render_template('run.html', content=content, table=table, result=result)
 
 
 def make_table(query):
@@ -113,14 +118,14 @@ def make_table_response(query):
 
 
 def happy_not_tostr(value):
-    if value is 1:
+    if value == 1:
         return "Happy"
     else:
         return "Not Happy"
 
 
 def happy_not_toint(str):
-    if str is "Happy":
+    if str == "Happy":
         return 1
     else:
         return 0
