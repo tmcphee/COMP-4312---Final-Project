@@ -12,11 +12,16 @@
                                 <tr>
                                     <th scope="col">Description</th>
                                     <th scope="col">Response</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">
+                                        <form method="post">
+                                            <button type="submit" class="btn btn-primary" name="Download">Download</button>
+                                        </form>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{ table|safe }}
+
                             </tbody>
                         </table>
                     </div>

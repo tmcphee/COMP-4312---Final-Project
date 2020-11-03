@@ -2,8 +2,9 @@
 
 import os
 import logging
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template, make_response
 from flask_cors import CORS
+import pyexcel
 import signal
 import datetime
 import sys
@@ -66,8 +67,16 @@ def application():
 @app.route('/archive', methods=('GET', 'POST'))
 def response():
     if request.method == 'POST':
-        content = request.form['Delete']
-        sql_insert("DELETE FROM Reviews WHERE id=" + content)
+        if 'Delete' in request.form:
+            sql_insert("DELETE FROM Reviews WHERE id=" + request.form['Delete'])
+
+        if 'Download' in request.form:
+            data = sql_to_string()
+            sheet = pyexcel.get_sheet(file_type="csv", file_content=data)
+            outfile = make_response(sheet.csv)
+            outfile.headers["Content-Disposition"] = "attachment; filename=Hotel_Reviews.csv"
+            outfile.headers["Content-type"] = "text/csv"
+            return outfile
 
     table = make_table_response("SELECT * FROM Reviews order by id desc")
     return render_template('response.html', table=table)
@@ -81,14 +90,24 @@ def run():
         content = request.form['input']
         # ---------------Machine-Learning-Here---------------
         print(content)
-        result = "Happy"
+        result = "happy"
         # ---------------------------------------------------
+        result = result_conv(result)
         sql_insert("INSERT INTO Reviews (Description, Response) "
                    "VALUES ('" + content + "', " + str(happy_not_toint(result)) + ")")
         result = "Result: " + result
 
     table = make_table("SELECT * FROM Reviews order by id desc LIMIT 3")
     return render_template('run.html', content=content, table=table, result=result)
+
+
+def sql_to_string():
+    obj = "Description,Response\n"
+    query = sql_select("SELECT * FROM Reviews order by id desc")
+    for x in query:
+        obj += x[1] + "," + happy_not_tostr(x[2]) + "\n"
+    print(obj)
+    return obj
 
 
 def make_table(query):
@@ -115,6 +134,13 @@ def make_table_response(query):
                  + str(x[0]) + ">Delete</button></form></td>"
         table += "</tr>"
     return table
+
+
+def result_conv(str):
+    if str == "happy":
+        return "Happy"
+    else:
+        return "Not Happy"
 
 
 def happy_not_tostr(value):
