@@ -36,6 +36,6 @@ jobs:
       # Pushes the Docker image to DockerHub
       - name: Docker push
         run: |
-          docker push . -t tmcphee/hotelreviews:latest
+          docker push -t tmcphee/hotelreviews:latest
 
 
