@@ -66,20 +66,64 @@ def application():
 
 @app.route('/archive', methods=('GET', 'POST'))
 def response():
+    query = "SELECT * FROM Reviews "
+    input = ""
+    response = ""
     if request.method == 'POST':
         if 'Delete' in request.form:
             sql_insert("DELETE FROM Reviews WHERE id=" + request.form['Delete'])
 
+        if 'Search' in request.form:
+            if request.form['Input'] != "":
+                query += "WHERE Description LIKE '%" + request.form['Input'] + "%' "
+                if request.form['Response'] == "Happy":
+                    query += "AND Response=1 "
+                    response = "Happy"
+                if request.form['Response'] == "Not Happy":
+                    query += "AND Response=0 "
+                    response = "Not Happy"
+                input = request.form['Input']
+            else:
+                if request.form['Response'] == "Happy":
+                    query += "WHERE Response=1 "
+                    response = "Happy"
+                if request.form['Response'] == "Not Happy":
+                    query += "WHERE Response=0 "
+                    response = "Not Happy"
+
         if 'Download' in request.form:
-            data = sql_to_string()
+            if request.form['Input'] != "":
+                query += "WHERE Description LIKE '%" + request.form['Input'] + "%' "
+                if request.form['Response'] == "Happy":
+                    query += "AND Response=1 "
+                if request.form['Response'] == "Not Happy":
+                    query += "AND Response=0 "
+            else:
+                if request.form['Response'] == "Happy":
+                    query += "WHERE Response=1 "
+                if request.form['Response'] == "Not Happy":
+                    query += "WHERE Response=0 "
+            query += "order by id desc"
+            data = sql_to_string(query)
             sheet = pyexcel.get_sheet(file_type="csv", file_content=data)
             outfile = make_response(sheet.csv)
             outfile.headers["Content-Disposition"] = "attachment; filename=Hotel_Reviews.csv"
             outfile.headers["Content-type"] = "text/csv"
             return outfile
 
-    table = make_table_response("SELECT * FROM Reviews order by id desc")
-    return render_template('response.html', table=table)
+    r1 = ""
+    r2 = ""
+    r3 = ""
+    if response == "Happy":
+        r1 = "checked"
+    else:
+        if response == "Not Happy":
+            r2 = "checked"
+        else:
+            r3 = "checked"
+    query += "order by id desc"
+    table = make_table_response(query)
+    return render_template('response.html', table=table, input=input, response=response, r1=r1, r2=r2, r3=r3)
 
 
 @app.route('/run', methods=('GET', 'POST'))
@@ -101,11 +145,12 @@ def run():
     return render_template('run.html', content=content, table=table, result=result)
 
 
-def sql_to_string():
+def sql_to_string(q):
     obj = "Description,Response\n"
-    query = sql_select("SELECT * FROM Reviews order by id desc")
+    query = sql_select(q)
     for x in query:
-        obj += x[1] + "," + happy_not_tostr(x[2]) + "\n"
+        x = sql_format_response(x)
+        obj += "" + x[1] + "," + happy_not_tostr(x[2]) + "\n"
     print(obj)
     return obj
 

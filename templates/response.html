@@ -5,6 +5,52 @@
         <div class="row">
             <div class="col-12">
                 <div class="card bg-secondary text-white">
+                    <h5 class="card-header">Search</h5>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="text" value="{{ input|safe }}" name="Input"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="col-6">
+                                    <fieldset class="form-group">
+                                        <div class="row">
+                                            <legend class="col-form-label col-sm-2 pt-0">Response</legend>
+                                            <div class="col-sm-10">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="Response" id="gridRadios1" value="Happy" {{ r1|safe }}>
+                                                    <label class="form-check-label" for="gridRadios1">
+                                                        Happy
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="Response" id="gridRadios2" value="Not Happy" {{ r2|safe }}>
+                                                    <label class="form-check-label" for="gridRadios2">
+                                                        Not Happy
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="Response" id="gridRadios3" value="Both"
+                                                           {{ r3|safe }}>
+                                                    <label class="form-check-label" for="gridRadios3">
+                                                        Both
+                                                  </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  </fieldset>
+                                </div>
+                                <button type="submit" class="btn btn-primary" name="Search">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-secondary text-white">
                     <h5 class="card-header">Archived Reviews</h5>
                     <div class="card-body">
                         <table class="table">
@@ -14,6 +60,8 @@
                                     <th scope="col">Response</th>
                                     <th scope="col">
                                         <form method="post">
+                                            <input type="hidden" name="Input" value="{{ input|safe }}">
+                                            <input type="hidden" name="Response" value="{{ response|safe }}">
                                             <button type="submit" class="btn btn-primary" name="Download">Download</button>
                                         </form>
                                     </th>
@@ -21,11 +69,11 @@
                             </thead>
                             <tbody>
                                 {{ table|safe }}
-
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-{% endblock %} 
+    </div>
+{% endblock %}
