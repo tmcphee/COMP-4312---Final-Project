@@ -7,8 +7,6 @@ name: hotelreviews
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -21,10 +19,23 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
+      
+      # Login to Docker
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PW: ${{ secrets.DOCKER_PW }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PW
+          
+      # Builds the docker image
       - name: Docker build
         run: |
           docker build . -t tmcphee/hotelreviews:latest
+          
+      # Pushes the Docker image to DockerHub
+      - name: Docker push
+        run: |
+          docker push . -t tmcphee/hotelreviews:latest
 
 
