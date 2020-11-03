@@ -79,7 +79,7 @@ def run():
     if request.method == 'POST':
         content = request.form['input']
         print(content)
-        sql_insert("INSERT INTO Reviews (Description, Response) VALUES ('" + content + "', 1)")
+        sql_insert("INSERT INTO Reviews (Description, Response) VALUES ('" + content + "', happy_not_toint('Happy'))")
 
     table = "generate a table from SQL DB here"
     table = make_table("SELECT * FROM Reviews order by id desc LIMIT 3")
@@ -93,7 +93,7 @@ def make_table(query):
         x = sql_format_response(x)
         table += "<tr>"
         table += "<td>" + x[1] + "</td>"
-        table += "<td>" + yes_no(x[2]) + "</td>"
+        table += "<td>" + happy_not_tostr(x[2]) + "</td>"
         table += "</tr>"
     return table
 
@@ -105,18 +105,25 @@ def make_table_response(query):
         x = sql_format_response(x)
         table += "<tr>"
         table += "<td>" + x[1] + "</td>"
-        table += "<td>" + yes_no(x[2]) + "</td>"
+        table += "<td>" + happy_not_tostr(x[2]) + "</td>"
         table += "<td><form method=\"post\"><button type=\"submit\" class=\"btn btn-danger\" name=\"Delete\"value="\
                  + str(x[0]) + ">Delete</button></form></td>"
         table += "</tr>"
     return table
 
 
-def yes_no(value):
-    if value==1:
+def happy_not_tostr(value):
+    if value is 1:
         return "Happy"
     else:
         return "Not Happy"
+
+
+def happy_not_toint(str):
+    if str is "Happy":
+        return 1
+    else:
+        return 0
 
 
 if __name__ == '__main__':
