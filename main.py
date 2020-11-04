@@ -136,7 +136,8 @@ def run():
         content = request.form['input']
         # ---------------Machine-Learning-Here---------------
         print(content)
-        result, prob = predict(content, "Dataset/LR.pickle")
+        ml_path = os.path.join("Dataset", "LR.pickle")
+        result, prob = predict(content, ml_path)
         print(result)
         print(prob)
         # ---------------------------------------------------
