@@ -8,7 +8,9 @@ import pyexcel
 import signal
 import datetime
 import sys
+from model import predict
 from SQL import *
+
 
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
@@ -134,7 +136,9 @@ def run():
         content = request.form['input']
         # ---------------Machine-Learning-Here---------------
         print(content)
-        result = "happy"
+        result, prob = predict(content, "Dataset/LR.pickle")
+        print(result)
+        print(prob)
         # ---------------------------------------------------
         result = result_conv(result)
         sql_insert("INSERT INTO Reviews (Description, Response) "
