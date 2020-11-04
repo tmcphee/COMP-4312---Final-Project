@@ -5,7 +5,7 @@ The application uses a machine learning model to determine if a hotel review is 
 The Hotel Review Analyzer uses python flask to host the web interface
 
 ### Features:
-* Machine learning model to analyze and determine if a review is positive or nagative.
+* Machine learning model to analyze and determine if a review is positive or negative.
 * SQL to store new data
 * Docker image for easy deployment
 
