@@ -1,6 +1,6 @@
 # Hotel Review Analyzer
 #### COMP-4312 Final Project
-The application uses a machine learning model to determine if a hotel review is positive or nagative. The applicaion hosts a web interface where the user can pass a review to the trained model to be analyzed. 
+The application uses a machine learning model to determine if a hotel review is positive or negative. The applicaion hosts a web interface where the user can pass a review to the trained model to be analyzed. 
 
 The Hotel Review Analyzer uses python flask to host the web interface
 
