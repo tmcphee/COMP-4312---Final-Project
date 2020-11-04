@@ -26,7 +26,7 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PW: ${{ secrets.DOCKER_PW }}
         run: |
-          docker login -u $DOCKER_USER --password-stdin $DOCKER_PW
+          docker login -u $DOCKER_USER --p $DOCKER_PW
           
       # Builds the docker image
       - name: Docker build
