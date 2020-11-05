@@ -13,7 +13,7 @@ nltk.download('stopwords')
 
 
 def main():
-    df = get_data("Dataset/hotel-reviews.csv")
+    df = get_data("Dataset\hotel-reviews.csv")
     #describe_data(df)
     #print("Training data converted to lower case: ")
     #data_to_lower(df)
