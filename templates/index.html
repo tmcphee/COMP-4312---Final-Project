@@ -10,7 +10,7 @@ img {vertical-align: middle;}
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 900px;
+  max-width: 960px;
   position: relative;
   margin: auto;
 }
@@ -38,18 +38,18 @@ img {vertical-align: middle;}
 
 .fade {
   -webkit-animation-name: fade;
-  -webkit-animation-duration: 1.5s;
+  -webkit-animation-duration: 5.0s;
   animation-name: fade;
-  animation-duration: 1.5s;
+  animation-duration: 5.0s;
 }
 
 @-webkit-keyframes fade {
-  from {opacity: .4} 
+  from {opacity: .8} 
   to {opacity: 1}
 }
 
 @keyframes fade {
-  from {opacity: .4} 
+  from {opacity: .8} 
   to {opacity: 1}
 }
 
@@ -122,7 +122,7 @@ function showSlides() {
   }
   slides[slideIndex-1].style.display = "block";  
   dots[slideIndex-1].className += " active";
-  setTimeout(showSlides, 4000);
+  setTimeout(showSlides, 5000);
 }
 </script>
 
@@ -130,4 +130,5 @@ function showSlides() {
 	</div>
 		<strong><br>&nbsp;&nbsp; To start go to "Run" or "Archive"</strong><br><br>
 		{% endblock %}
+
 
