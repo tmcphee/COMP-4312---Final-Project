@@ -13,7 +13,7 @@ RUN pip install -r requirements.txt
 # copy the content of the local src directory to the working directory
 COPY . .
 
-RUN unzip /Dataset/LR.zip -d /Dataset
+RUN unzip /code/Dataset/LR.zip -d /code/Dataset
 
 # command to run on container start
 CMD [ "python", "main.py", "0.0.0.0" ]
