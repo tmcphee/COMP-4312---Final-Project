@@ -10,6 +10,7 @@ import datetime
 import sys
 from model import predict
 from SQL import *
+from zipfile import ZipFile
 
 
 # define the app
@@ -208,14 +209,30 @@ def happy_not_toint(str):
         return 0
 
 
+def extract_lr():
+    path = os.path.dirname(os.path.abspath(__file__))
+
+    if not os.path.exists(os.path.join(path, "Dataset", "LR.pickle")):
+        print("LR.zip Not Found -> Extracting")
+        zf = ZipFile(os.path.join(path, "Dataset", "LR.zip"), 'r')
+        zf.extractall(os.path.join(path, "Dataset"))
+        zf.close()
+        print("-> Finished Extracting")
+    else:
+        print("LR.pickle Exists -> Skip Extract")
+
+
 if __name__ == '__main__':
     """
     kill -9 $(lsof -i:5000 -t) 2> /dev/null
     """
     # Default Host
+    extract_lr()
     host = "127.0.0.1"
     # Allow for alternate host in Dockerfile
     if len(sys.argv) == 2:
         host = sys.argv[1]
     # app.run(debug=True)
     app.run(host=host, port=8080, debug=True)
+
+
