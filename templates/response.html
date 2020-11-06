@@ -59,11 +59,22 @@
                                     <th scope="col">Description</th>
                                     <th scope="col">Response</th>
                                     <th scope="col">
-                                        <form method="post">
-                                            <input type="hidden" name="Input" value="{{ input|safe }}">
-                                            <input type="hidden" name="Response" value="{{ response|safe }}">
-                                            <button type="submit" class="btn btn-primary" name="Download">Download</button>
-                                        </form>
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <form method="post">
+                                                    <input type="hidden" name="Input" value="{{ input|safe }}">
+                                                    <input type="hidden" name="Response" value="{{ response|safe }}">
+                                                    <button type="submit" class="btn btn-primary" name="Download">Download</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-2">
+                                                <form method="post">
+                                                    <input type="hidden" name="Input" value="{{ input|safe }}">
+                                                    <input type="hidden" name="Response" value="{{ response|safe }}">
+                                                    <button type="submit" class="btn btn-primary" name="SavetoGCP">Save to GCP</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </th>
                                 </tr>
                             </thead>

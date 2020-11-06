@@ -67,6 +67,12 @@ def application():
     return render_template('application.html', content=content)
 
 
+@app.route('/bucket')
+def bucket():
+    content = "application page test"
+    return render_template('Bucket.html', content=content)
+
+
 @app.route('/archive', methods=('GET', 'POST'))
 def response():
     query = "SELECT * FROM Reviews "
