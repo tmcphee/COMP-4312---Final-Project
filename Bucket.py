@@ -32,6 +32,14 @@ def download_file(path, name):
     blob.download_to_filename(name)
 
 
+def get_signed_url(path, name):
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+
+    file = bucket.file()
+
+
+
 def list_files():
     blob_names = []
     storage_client = storage.Client()
@@ -43,3 +51,17 @@ def list_files():
     return blob_names
 
 
+def web_list_blobs():
+    liststr = ""
+
+    for x in list_files():
+        liststr += "<form method=\"post\">"
+        liststr += "<strong>" + x + "</strong>"
+        liststr += "<button type=\"submit\" class=\"btn btn-danger\" name=\"Download\"value=" + x + ">Download</button>"
+        liststr += "</form>"
+
+    return liststr
+
+
+def web_dl_blob():
+    print("")

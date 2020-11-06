@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+{% block content %}
+    <br>
+	<div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-secondary text-white">
+                    <h5 class="card-header">Archived Reviews</h5>
+                    <div class="card-body">
+                        {{ list|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
