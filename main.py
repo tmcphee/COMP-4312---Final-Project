@@ -8,10 +8,14 @@ import pyexcel
 import signal
 import datetime
 import sys
+import json
 from model import predict
 from SQL import *
 from zipfile import ZipFile
+from Bucket import *
 
+bucket_name = "comp4312_hotel_reviews"
+host = "127.0.0.1"
 
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
@@ -69,8 +73,7 @@ def application():
 
 @app.route('/bucket')
 def bucket():
-    content = "application page test"
-    return render_template('Bucket.html', content=content)
+    return render_template('Bucket.html', list=web_list_blobs(host, bucket_name))
 
 
 @app.route('/archive', methods=('GET', 'POST'))
@@ -228,16 +231,34 @@ def extract_lr():
         print("LR.pickle Exists -> Skip Extract")
 
 
+def read_config(host):
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    if host == "127.0.0.1":
+        jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
+    else:
+        jsonpath = os.path.join("config", "hotelreviews.conf")
+    with open(jsonpath) as f:
+        return json.load(f)
+
+
 if __name__ == '__main__':
     """
     kill -9 $(lsof -i:5000 -t) 2> /dev/null
     """
     # Default Host
     extract_lr()
-    host = "127.0.0.1"
+
     # Allow for alternate host in Dockerfile
     if len(sys.argv) == 2:
         host = sys.argv[1]
+
+    data = read_config(host)
+    if data is not None:
+        sql_proxy_run(host, data['instance_name'])
+        bucket_name = data['bucket_name']
+
+    create_bk(bucket_name, host)
+    #download_file(".", "hotel.png", bucket_name, host)
     # app.run(debug=True)
     app.run(host=host, port=8080, debug=True)
 

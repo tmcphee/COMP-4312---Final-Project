@@ -16,67 +16,68 @@ from google.oauth2 import service_account
 import six
 from six.moves.urllib.parse import quote
 
-bucket_name = "comp4312_hotel_reviews"
+
+def get_cred_path(host):
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    if host == "127.0.0.1":
+        return os.path.join(ROOT_DIR, "credentials.json")
+    else:
+        return os.path.join("config", "credentials.json")
 
 
-def create_bk():
+def create_bk(bucket_name, host):
+    credpath = get_cred_path(host)
     try:
-        create_bucket(bucket_name=bucket_name)
+        storage_client = storage.Client()
+        storage_client.from_service_account_json(credpath)
+        bucket = storage_client.create_bucket(bucket_name)
         print("Bucket {} created".format(bucket_name))
         return True
-    except:
-        print("Bucket name is either existing or invalid format")
+    except Exception as e:
+        print("Bucket name is either existing or invalid format -> ".format(e))
         return False
 
 
-def upload_file(path, name):
+def upload_file(path, name, bucket_name, host):
+    credpath = get_cred_path(host)
     storage_client = storage.Client()
+    storage_client.from_service_account_json(credpath)
     bucket = storage_client.bucket(bucket_name)
 
     blob = bucket.blob(path)
     blob.upload_from_filename(name)
 
 
-def download_file(path, name):
+def download_file(path, name, bucket_name, host):
+    credpath = get_cred_path(host)
     storage_client = storage.Client()
+    storage_client.from_service_account_json(credpath)
     bucket = storage_client.bucket(bucket_name)
 
     blob = bucket.blob(path)
     blob.download_to_filename(name)
 
 
-def get_signed_url(path, name):
+def get_signed_url(path, name, bucket_name, host):
+    credpath = get_cred_path(host)
     storage_client = storage.Client()
+    storage_client.from_service_account_json(credpath)
     bucket = storage_client.bucket(bucket_name)
 
     file = bucket.file()
 
 
-def list_files():
+def list_files(bucket_name, host):
+    credpath = get_cred_path(host)
     blob_names = []
     storage_client = storage.Client()
+    storage_client.from_service_account_json(credpath)
     blobs = storage_client.list_blobs(bucket_name)
 
     for blob in blobs:
         blob_names.append(blob.name)
 
     return blob_names
-
-
-def web_list_blobs():
-    liststr = ""
-
-    for x in list_files():
-        liststr += "<form method=\"post\">"
-        liststr += "<strong>" + x + "</strong>"
-        liststr += "<button type=\"submit\" class=\"btn btn-danger\" name=\"Download\"value=" + x + ">Download</button>"
-        liststr += "</form>"
-
-    return liststr
-
-
-def web_dl_blob():
-    print("")
 
 
 def generate_signed_url(service_account_file, bucket_name, object_name,
@@ -164,11 +165,24 @@ def generate_signed_url(service_account_file, bucket_name, object_name,
     return signed_url
 
 
-# test
-#create_bk()
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-print(generate_signed_url(
-        service_account_file=os.path.join(ROOT_DIR, "credentials.json"),
+def get_signed_url_credfile(host, bucket_name, object_name):
+    credpath = get_cred_path(host)
+    return generate_signed_url(
+        service_account_file=credpath,
         http_method='GET', bucket_name=bucket_name,
-        object_name="hotel.png", subresource=None,
-        expiration=604800))
+        object_name=object_name, subresource=None,
+        expiration=604800)
+
+
+def web_list_blobs(host, bucket_name):
+    liststr = ""
+    for x in list_files(bucket_name, host):
+        url = get_signed_url_credfile(host, bucket_name, x)
+        liststr += "<a download=\"text\" href=\"" + url + "\">"
+        liststr += x
+        liststr += "</a><br>"
+
+    return liststr
+
+
+

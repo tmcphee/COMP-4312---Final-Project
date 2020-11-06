@@ -3,6 +3,7 @@ Dataset/LR.pickle
 
 #sql
 credentials.json
+hotelreviews.conf
 
 # pycharm
 .idea/
