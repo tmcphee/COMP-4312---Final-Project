@@ -36,7 +36,7 @@ If running on windows the credentials.json and hotelreviews.conf should be place
 3. Choose Edit bucket permissions.
 4. Click the + Add members button.
 5. In the New members field
-> Member: <BUCKET-NAME>@<PROJECT-NAME>.iam.gserviceaccount.com
+> Member: BUCKET-NAME@PROJECT-NAME.iam.gserviceaccount.com
 6. Select the role Storage Object Admin
 7. Click Save.
 
