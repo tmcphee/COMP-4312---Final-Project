@@ -122,6 +122,26 @@ def response():
             outfile.headers["Content-Disposition"] = "attachment; filename=Hotel_Reviews.csv"
             outfile.headers["Content-type"] = "text/csv"
             return outfile
+        if 'SavetoGCP' in request.form:
+            if request.form['Input'] != "":
+                query += "WHERE Description LIKE '%" + request.form['Input'] + "%' "
+                if request.form['Response'] == "Happy":
+                    query += "AND Response=1 "
+                if request.form['Response'] == "Not Happy":
+                    query += "AND Response=0 "
+            else:
+                if request.form['Response'] == "Happy":
+                    query += "WHERE Response=1 "
+                if request.form['Response'] == "Not Happy":
+                    query += "WHERE Response=0 "
+            query += "order by id desc"
+            data = sql_to_string(query)
+            sheet = pyexcel.get_sheet(file_type="csv", file_content=data)
+            sheet.save_as(filename="temp.csv")
+            ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+            tmp_path = os.path.join(ROOT_DIR, "temp.csv")
+            upload_file("test.csv", tmp_path)
+            os.remove(tmp_path)
 
     r1 = ""
     r2 = ""
