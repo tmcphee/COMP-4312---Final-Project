@@ -1,7 +1,3 @@
-from google.cloud import storage
-from storage_list_files import return_blobs
-from storage_create_bucket import create_bucket
-from storage_upload_file import upload_blob
 
 import os
 import binascii
@@ -9,70 +5,56 @@ import collections
 import datetime
 import hashlib
 import sys
-
-# pip install google-auth
-from google.oauth2 import service_account
-# pip install six
 import six
+
+from google.oauth2 import service_account
+from google.cloud import storage
 from six.moves.urllib.parse import quote
 
 
-def get_cred_path(host):
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    if host == "127.0.0.1":
-        return os.path.join(ROOT_DIR, "credentials.json")
-    else:
-        return os.path.join("config", "credentials.json")
-
-
-def create_bk(bucket_name, host):
-    credpath = get_cred_path(host)
+def create_bk():
     try:
         storage_client = storage.Client()
-        storage_client.from_service_account_json(credpath)
-        bucket = storage_client.create_bucket(bucket_name)
-        print("Bucket {} created".format(bucket_name))
+        storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+        bucket = storage_client.create_bucket(os.environ['BUCKET_NAME'])
+        print("Bucket {} created".format(os.environ['BUCKET_NAME']))
         return True
     except Exception as e:
         print("Bucket name is either existing or invalid format -> ".format(e))
         return False
 
 
-def upload_file(path, name, bucket_name, host):
-    credpath = get_cred_path(host)
+def upload_file(path, name):
     storage_client = storage.Client()
-    storage_client.from_service_account_json(credpath)
-    bucket = storage_client.bucket(bucket_name)
+    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    bucket = storage_client.bucket(os.environ['BUCKET_NAME'])
 
     blob = bucket.blob(path)
     blob.upload_from_filename(name)
 
 
-def download_file(path, name, bucket_name, host):
-    credpath = get_cred_path(host)
+def download_file(path, name):
     storage_client = storage.Client()
-    storage_client.from_service_account_json(credpath)
-    bucket = storage_client.bucket(bucket_name)
+    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    bucket = storage_client.bucket(os.environ['BUCKET_NAME'])
 
     blob = bucket.blob(path)
     blob.download_to_filename(name)
 
-
-def get_signed_url(path, name, bucket_name, host):
-    credpath = get_cred_path(host)
+'''
+def get_signed_url():
     storage_client = storage.Client()
-    storage_client.from_service_account_json(credpath)
-    bucket = storage_client.bucket(bucket_name)
+    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    bucket = storage_client.bucket(os.environ['BUCKET_NAME'])
 
     file = bucket.file()
+'''
 
-
-def list_files(bucket_name, host):
-    credpath = get_cred_path(host)
+def list_files():
     blob_names = []
     storage_client = storage.Client()
-    storage_client.from_service_account_json(credpath)
-    blobs = storage_client.list_blobs(bucket_name)
+    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    blobs = storage_client.list_blobs(os.environ['BUCKET_NAME'])
 
     for blob in blobs:
         blob_names.append(blob.name)
@@ -165,19 +147,18 @@ def generate_signed_url(service_account_file, bucket_name, object_name,
     return signed_url
 
 
-def get_signed_url_credfile(host, bucket_name, object_name):
-    credpath = get_cred_path(host)
+def get_signed_url_credfile(object_name):
     return generate_signed_url(
-        service_account_file=credpath,
-        http_method='GET', bucket_name=bucket_name,
+        service_account_file=os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
+        http_method='GET', bucket_name=os.environ['BUCKET_NAME'],
         object_name=object_name, subresource=None,
         expiration=604800)
 
 
-def web_list_blobs(host, bucket_name):
+def web_list_blobs(host):
     liststr = ""
-    for x in list_files(bucket_name, host):
-        url = get_signed_url_credfile(host, bucket_name, x)
+    for x in list_files():
+        url = get_signed_url_credfile(x)
         liststr += "<a download=\"text\" href=\"" + url + "\">"
         liststr += x
         liststr += "</a><br>"

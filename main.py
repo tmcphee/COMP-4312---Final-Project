@@ -14,7 +14,7 @@ from SQL import *
 from zipfile import ZipFile
 from Bucket import *
 
-bucket_name = "comp4312_hotel_reviews"
+os.environ['BUCKET_NAME'] = "comp4312_hotel_reviews"
 host = "127.0.0.1"
 
 # define the app
@@ -73,7 +73,7 @@ def application():
 
 @app.route('/bucket')
 def bucket():
-    return render_template('Bucket.html', list=web_list_blobs(host, bucket_name))
+    return render_template('Bucket.html', list=web_list_blobs(host))
 
 
 @app.route('/archive', methods=('GET', 'POST'))
@@ -241,6 +241,14 @@ def read_config(host):
         return json.load(f)
 
 
+def get_cred_path(host):
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    if host == "127.0.0.1":
+        return os.path.join(ROOT_DIR, "credentials.json")
+    else:
+        return os.path.join("config", "credentials.json")
+
+
 if __name__ == '__main__':
     """
     kill -9 $(lsof -i:5000 -t) 2> /dev/null
@@ -255,9 +263,10 @@ if __name__ == '__main__':
     data = read_config(host)
     if data is not None:
         sql_proxy_run(host, data['instance_name'])
-        bucket_name = data['bucket_name']
+        os.environ['BUCKET_NAME'] = data['bucket_name']
 
-    create_bk(bucket_name, host)
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = get_cred_path(host)
+    create_bk()
     #download_file(".", "hotel.png", bucket_name, host)
     # app.run(debug=True)
     app.run(host=host, port=8080, debug=True)
