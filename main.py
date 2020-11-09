@@ -137,10 +137,10 @@ def response():
             query += "order by id desc"
             data = sql_to_string(query)
             sheet = pyexcel.get_sheet(file_type="csv", file_content=data)
-            sheet.save_as(filename="temp.csv")
+            sheet.save_as(filename=request.form['Name'] + ".csv")
             ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-            tmp_path = os.path.join(ROOT_DIR, "temp.csv")
-            upload_file("test.csv", tmp_path)
+            tmp_path = os.path.join(ROOT_DIR, request.form['Name'] + ".csv")
+            upload_file(request.form['Name'] + ".csv", tmp_path)
             os.remove(tmp_path)
 
     r1 = ""
@@ -284,11 +284,14 @@ if __name__ == '__main__':
     if data is not None:
         sql_proxy_run(host, data['instance_name'])
         os.environ['BUCKET_NAME'] = data['bucket_name']
+        os.environ['SQL_HOST'] = data['SQL_HOST']
+        os.environ['SQL_USER'] = data['SQL_USER']
+        os.environ['SQL_PASSWORD'] = data['SQL_PASSWORD']
+        os.environ['SQL_DB'] = data['SQL_DB']
 
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = get_cred_path(host)
     create_bk()
-    #download_file(".", "hotel.png", bucket_name, host)
-    # app.run(debug=True)
+
     app.run(host=host, port=8080, debug=True)
 
 

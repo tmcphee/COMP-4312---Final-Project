@@ -5,10 +5,10 @@ import os
 #cloud_sql_proxy -instances=<INSTANCE_NAME>>=tcp:3306 -credential_file=credentials.json &
 
 try:
-    connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='comp4312admin',
-                             db='hotel_reviews')
+    connection = pymysql.connect(host=os.environ['SQL_HOST'],
+                                 user=os.environ['SQL_USER'],
+                                 password=os.environ['SQL_PASSWORD'],
+                                 db=os.environ['SQL_DB'])
 except Exception as e:
     print("SQL ERROR - Exeception occured:{}".format(e))
 

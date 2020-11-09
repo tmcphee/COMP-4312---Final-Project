@@ -22,7 +22,11 @@ The file can be downloaded [Here](https://console.cloud.google.com/apis/credenti
 ```
   {
   "instance_name": "PUT-SQL-INSTANCE-NAME-HERE",
-  "bucket_name": "PUT-BUCKET-NAME-HERE"
+  "bucket_name": "PUT-BUCKET-NAME-HERE",
+  "SQL_HOST": "127.0.0.1",
+  "SQL_USER": "root",
+  "SQL_PASSWORD": "password",
+  "SQL_DB": "hotel_reviews"
   }
 ```
 
