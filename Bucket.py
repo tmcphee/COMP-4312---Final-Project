@@ -165,7 +165,7 @@ def web_list_blobs(host):
     liststr = ""
     for x in list_files():
         url = get_signed_url_credfile(x)
-        liststr += "<a download=\"text\" href=\"" + url + "\">"
+        liststr += "<a style=\"color:white\" download=\"text\" href=\"" + url + "\">"
         liststr += x
         liststr += "</a><br>"
 
