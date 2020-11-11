@@ -12,7 +12,7 @@ The Hotel Review Analyzer uses python flask to host the web interface
 ## Usage
 `` docker run --name=Hotel-Review-Analyzer -d -p 8080:8080 -v /path/to/config:/config:rw  tmcphee/hotelreviews``
 
-##### The Docker requires two files to be placed into a the mapped /config folder
+##### The application requires two files to be placed into a the mapped /config folder or in the root directory
 > credentials.json 
 
 The file can be downloaded [Here](https://console.cloud.google.com/apis/credentials/serviceaccountkey?_ga=2.200870509.238563060.1604591851-1077707084.1600187677)
@@ -30,7 +30,24 @@ The file can be downloaded [Here](https://console.cloud.google.com/apis/credenti
   }
 ```
 
-If running on windows the credentials.json and hotelreviews.conf should be placed into the root directory
+###### Optonal:
+The configuration can be defined using ENV Variables
+```
+  ENVIRONMENT: "Linux"
+  HOST: "0.0.0.0"
+  GOOGLE_APPLICATION_CREDENTIALS: "credentials.json"
+  INSTANCE_NAME: "PUT-SQL-INSTANCE-NAME-HERE"
+  BUCKET_NAME: "PUT-BUCKET-NAME-HERE"
+  SQL_HOST: "127.0.0.1"
+  SQL_USER: "root"
+  SQL_PASSWORD: "comp4312admin"
+  SQL_DB: "hotel_reviews"
+```
+
+If the host is `0.0.0.0` then the system assumes the service is running via Linux. 
+If the host is `127.0.0.1` then the system assumes the service is running via Windows
+
+This is important to note as the system will use the appropriate SQL_Proxy accordingly 
 
 ### Configuration
 ##### Bucket Roles (Signed URL):
