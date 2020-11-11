@@ -15,7 +15,7 @@ from zipfile import ZipFile
 from Bucket import *
 
 os.environ['BUCKET_NAME'] = "comp4312_hotel_reviews"
-host = "127.0.0.1"
+os.environ['ENVIRONMENT'] = "Windows"
 
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
@@ -250,14 +250,18 @@ def extract_lr():
         print("LR.pickle Exists -> Skip Extract")
 
 
+'''
 def read_config(host):
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    if host == "127.0.0.1":
-        jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
-    else:
-        jsonpath = os.path.join("config", "hotelreviews.conf")
-    with open(jsonpath) as f:
-        return json.load(f)
+    try:
+        ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+        if host == "127.0.0.1":
+            jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
+        else:
+            jsonpath = os.path.join("config", "hotelreviews.conf")
+        with open(jsonpath) as f:
+            return json.load(f)
+    except:
+        return None
 
 
 def get_cred_path(host):
@@ -266,29 +270,71 @@ def get_cred_path(host):
         return os.path.join(ROOT_DIR, "credentials.json")
     else:
         return os.path.join("config", "credentials.json")
+'''
+
+
+def find_conf_files():
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    try:
+        path1 = os.path.join(ROOT_DIR, "credentials.json")
+        if os.path.isfile(path1):
+            print("here -> " + path1)
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path1
+            jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
+            with open(jsonpath) as f:
+                return json.load(f)
+        else:
+            path2 = os.path.join("config", "credentials.json")
+            if os.path.isfile(path2):
+                print("here2")
+                os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path2
+                jsonpath = os.path.join("config", "credentials.json")
+                with open(jsonpath) as f:
+                    return json.load(f)
+        print("ERROR - Files not found")
+        return None
+    except Exception as e:
+        print("ERROR - CONFIG Files not found - Exeception occured:{}".format(e))
+        return None
 
 
 if __name__ == '__main__':
-    """
-    kill -9 $(lsof -i:5000 -t) 2> /dev/null
-    """
-    # Default Host
+    # Default host
+    host = "127.0.0.1"
+
+    # Extract the LR.pickle file if not already extracted
     extract_lr()
 
-    # Allow for alternate host in Dockerfile
+    # Check if the user defined a host as an env variable
+    if 'HOST' in os.environ:
+        host = os.environ['HOST']
+
+    # Check if the user defined a host as an argument
     if len(sys.argv) == 2:
         host = sys.argv[1]
 
-    data = read_config(host)
+    # Allow for alternate host in Dockerfile
+    # if host is 127.0.0.1 assume user is running on windows
+    # if host is 0.0.0.0 assume user is running in Linux (Docker)
+    if host == "127.0.0.1":
+        os.environ['ENVIRONMENT'] = "Windows"
+    else:
+        os.environ['ENVIRONMENT'] = "Linux"
+
+    # Check if user defined a config file
+    # if not the user can define the env variables manually
+    data = find_conf_files()
+    print("ENV - >" + os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
     if data is not None:
-        sql_proxy_run(host, data['instance_name'])
+        os.environ['INSTANCE_NAME'] = data['instance_name']
         os.environ['BUCKET_NAME'] = data['bucket_name']
         os.environ['SQL_HOST'] = data['SQL_HOST']
         os.environ['SQL_USER'] = data['SQL_USER']
         os.environ['SQL_PASSWORD'] = data['SQL_PASSWORD']
         os.environ['SQL_DB'] = data['SQL_DB']
+        sql_proxy_run()
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = get_cred_path(host)
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = get_cred_path(host)
     create_bk()
 
     app.run(host=host, port=8080, debug=True)

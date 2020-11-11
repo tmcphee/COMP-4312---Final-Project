@@ -60,6 +60,7 @@ def list_files():
     blob_names = []
     storage_client = storage.Client()
     storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    print(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
     blobs = storage_client.list_blobs(os.environ['BUCKET_NAME'])
 
     for blob in blobs:

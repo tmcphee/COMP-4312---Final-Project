@@ -36,20 +36,18 @@ def sql_format_response(content):
     return data
 
 
-def sql_proxy_run(host, instancename):
+def sql_proxy_run():
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     try:
-        if host == "127.0.0.1":
+        if os.environ['ENVIRONMENT'] == "Windows":
             proxypath = os.path.join(ROOT_DIR, "cloud_sql_proxy.exe")
-            credpath = os.path.join(ROOT_DIR, "credentials.json")
-            subprocess.Popen(proxypath + " -instances=" + instancename +"=tcp:3306 -credential_file=" + credpath +" &")
+            subprocess.Popen(proxypath + " -instances=" + os.environ['INSTANCE_NAME'] +"=tcp:3306 -credential_file=" + os.environ['GOOGLE_APPLICATION_CREDENTIALS'] +" &")
         else:
             proxypath = os.path.join(ROOT_DIR, "cloud_sql_proxy")
-            credpath = os.path.join("config", "credentials.json")
-            subprocess.Popen(proxypath + " -instances=" + instancename +"=tcp:3306 -credential_file=" + credpath +" &", shell=True)
-            print(proxypath + " -instances=" + instancename +"=tcp:3306 -credential_file=" + credpath +" &")
+            subprocess.Popen(proxypath + " -instances=" + os.environ['INSTANCE_NAME'] +"=tcp:3306 -credential_file=" + os.environ['GOOGLE_APPLICATION_CREDENTIALS'] +" &", shell=True)
     except Exception as e:
         print("SQL ERROR - Exeception occured:{}".format(e))
+
 
 #sql_insert("DROP TABLE Reviews")
 sql_insert("CREATE TABLE Reviews(id int NOT NULL AUTO_INCREMENT, Description BLOB NOT NULL, Response int(1) NOT NULL, PRIMARY KEY (id))")
