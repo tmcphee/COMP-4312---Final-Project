@@ -15,9 +15,9 @@ from six.moves.urllib.parse import quote
 def create_bk():
     try:
         storage_client = storage.Client()
-        storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-        bucket = storage_client.create_bucket(os.environ['BUCKET_NAME'])
-        print("Bucket {} created".format(os.environ['BUCKET_NAME']))
+        storage_client.from_service_account_json(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+        bucket = storage_client.create_bucket(os.environ.get('BUCKET_NAME'))
+        print("Bucket {} created".format(os.environ.get('BUCKET_NAME')))
         return True
     except Exception as e:
         print("Bucket name is either existing or invalid format -> ".format(e))
@@ -27,8 +27,8 @@ def create_bk():
 def upload_file(path, name):
     try:
         storage_client = storage.Client()
-        storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-        bucket = storage_client.bucket(os.environ['BUCKET_NAME'])
+        storage_client.from_service_account_json(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+        bucket = storage_client.bucket(os.environ.get('BUCKET_NAME'))
 
         blob = bucket.blob(path)
         blob.upload_from_filename(name)
@@ -40,8 +40,8 @@ def upload_file(path, name):
 
 def download_file(path, name):
     storage_client = storage.Client()
-    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-    bucket = storage_client.bucket(os.environ['BUCKET_NAME'])
+    storage_client.from_service_account_json(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+    bucket = storage_client.bucket(os.environ.get('BUCKET_NAME'))
 
     blob = bucket.blob(path)
     blob.download_to_filename(name)
@@ -59,9 +59,9 @@ def get_signed_url():
 def list_files():
     blob_names = []
     storage_client = storage.Client()
-    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-    print(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-    blobs = storage_client.list_blobs(os.environ['BUCKET_NAME'])
+    storage_client.from_service_account_json(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+    print(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+    blobs = storage_client.list_blobs(os.environ.get('BUCKET_NAME'))
 
     for blob in blobs:
         blob_names.append(blob.name)
@@ -156,13 +156,13 @@ def generate_signed_url(service_account_file, bucket_name, object_name,
 
 def get_signed_url_credfile(object_name):
     return generate_signed_url(
-        service_account_file=os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
-        http_method='GET', bucket_name=os.environ['BUCKET_NAME'],
+        service_account_file=os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'),
+        http_method='GET', bucket_name=os.environ.get('BUCKET_NAME'),
         object_name=object_name, subresource=None,
         expiration=604800)
 
 
-def web_list_blobs(host):
+def web_list_blobs():
     liststr = ""
     for x in list_files():
         url = get_signed_url_credfile(x)

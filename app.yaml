@@ -2,6 +2,13 @@ runtime: python38
 
 env_variables:
   HOST: "0.0.0.0"
+  GOOGLE_APPLICATION_CREDENTIALS: "credentials.json"
+  INSTANCE_NAME: "PUT INSTANCE NAME HERE"
+  BUCKET_NAME: "comp4312_hotel_reviews"
+  SQL_HOST: "127.0.0.1"
+  SQL_USER: "root"
+  SQL_PASSWORD: "comp4312admin"
+  SQL_DB: "hotel_reviews"
   
 manual_scaling:
   instances: 1

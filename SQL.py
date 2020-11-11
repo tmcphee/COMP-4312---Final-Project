@@ -5,10 +5,10 @@ import os
 #cloud_sql_proxy -instances=<INSTANCE_NAME>>=tcp:3306 -credential_file=credentials.json &
 
 try:
-    connection = pymysql.connect(host=os.environ['SQL_HOST'],
-                                 user=os.environ['SQL_USER'],
-                                 password=os.environ['SQL_PASSWORD'],
-                                 db=os.environ['SQL_DB'])
+    connection = pymysql.connect(host=os.environ.get('SQL_HOST'),
+                                 user=os.environ.get('SQL_USER'),
+                                 password=os.environ.get('SQL_PASSWORD'),
+                                 db=os.environ.get('SQL_DB'))
 except Exception as e:
     print("SQL ERROR - Exeception occured:{}".format(e))
 
@@ -39,12 +39,12 @@ def sql_format_response(content):
 def sql_proxy_run():
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     try:
-        if os.environ['ENVIRONMENT'] == "Windows":
+        if os.environ.get('ENVIRONMENT') == "Windows":
             proxypath = os.path.join(ROOT_DIR, "cloud_sql_proxy.exe")
-            subprocess.Popen(proxypath + " -instances=" + os.environ['INSTANCE_NAME'] +"=tcp:3306 -credential_file=" + os.environ['GOOGLE_APPLICATION_CREDENTIALS'] +" &")
+            subprocess.Popen(proxypath + " -instances=" + os.environ.get('INSTANCE_NAME') +"=tcp:3306 -credential_file=" + os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') +" &")
         else:
             proxypath = os.path.join(ROOT_DIR, "cloud_sql_proxy")
-            subprocess.Popen(proxypath + " -instances=" + os.environ['INSTANCE_NAME'] +"=tcp:3306 -credential_file=" + os.environ['GOOGLE_APPLICATION_CREDENTIALS'] +" &", shell=True)
+            subprocess.Popen(proxypath + " -instances=" + os.environ.get('INSTANCE_NAME') +"=tcp:3306 -credential_file=" + os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') +" &", shell=True)
     except Exception as e:
         print("SQL ERROR - Exeception occured:{}".format(e))
 

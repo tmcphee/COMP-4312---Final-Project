@@ -11,8 +11,9 @@ import sys
 import json
 from model import predict
 from SQL import *
-from zipfile import ZipFile
 from Bucket import *
+from zipfile import ZipFile
+
 
 os.environ['BUCKET_NAME'] = "comp4312_hotel_reviews"
 os.environ['ENVIRONMENT'] = "Windows"
@@ -73,7 +74,7 @@ def application():
 
 @app.route('/bucket')
 def bucket():
-    return render_template('Bucket.html', list=web_list_blobs(host))
+    return render_template('Bucket.html', list=web_list_blobs())
 
 
 @app.route('/archive', methods=('GET', 'POST'))
@@ -307,7 +308,7 @@ if __name__ == '__main__':
 
     # Check if the user defined a host as an env variable
     if 'HOST' in os.environ:
-        host = os.environ['HOST']
+        host = os.environ.get('HOST')
 
     # Check if the user defined a host as an argument
     if len(sys.argv) == 2:
@@ -324,7 +325,7 @@ if __name__ == '__main__':
     # Check if user defined a config file
     # if not the user can define the env variables manually
     data = find_conf_files()
-    print("ENV - >" + os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    print("ENV - >" + os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
     if data is not None:
         os.environ['INSTANCE_NAME'] = data['instance_name']
         os.environ['BUCKET_NAME'] = data['bucket_name']
