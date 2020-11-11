@@ -13,10 +13,8 @@ from model import predict
 from SQL import *
 from Bucket import *
 from zipfile import ZipFile
+from settings import *
 
-
-os.environ['BUCKET_NAME'] = "comp4312_hotel_reviews"
-os.environ['ENVIRONMENT'] = "Windows"
 
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
@@ -160,12 +158,9 @@ def run():
     if request.method == 'POST':
         content = request.form['input']
         # ---------------Machine-Learning-Here---------------
-        print(content)
         parent_path = os.path.dirname(os.path.abspath(__file__))
         ml_path = os.path.join(parent_path, "Dataset", "LR.pickle")
         result, prob = predict(content, ml_path)
-        print(result)
-        print(prob)
         # ---------------------------------------------------
         result = result_conv(result)
         sql_insert("INSERT INTO Reviews (Description, Response) "
@@ -182,7 +177,6 @@ def sql_to_string(q):
     for x in query:
         x = sql_format_response(x)
         obj += "" + x[1] + "," + happy_not_tostr(x[2]) + "\n"
-    print(obj)
     return obj
 
 
@@ -246,93 +240,14 @@ def extract_lr():
         print("LR.pickle Exists -> Skip Extract")
 
 
-'''
-def read_config(host):
-    try:
-        ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-        if host == "127.0.0.1":
-            jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
-        else:
-            jsonpath = os.path.join("config", "hotelreviews.conf")
-        with open(jsonpath) as f:
-            return json.load(f)
-    except:
-        return None
-
-
-def get_cred_path(host):
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    if host == "127.0.0.1":
-        return os.path.join(ROOT_DIR, "credentials.json")
-    else:
-        return os.path.join("config", "credentials.json")
-'''
-
-
-def find_conf_files():
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    try:
-        path1 = os.path.join(ROOT_DIR, "credentials.json")
-        if os.path.isfile(path1):
-            print("here -> " + path1)
-            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path1
-            jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
-            with open(jsonpath) as f:
-                return json.load(f)
-        else:
-            path2 = os.path.join("config", "credentials.json")
-            if os.path.isfile(path2):
-                print("here2")
-                os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path2
-                jsonpath = os.path.join("config", "credentials.json")
-                with open(jsonpath) as f:
-                    return json.load(f)
-        print("ERROR - Files not found")
-        return None
-    except Exception as e:
-        print("ERROR - CONFIG Files not found - Exeception occured:{}".format(e))
-        return None
-
-
 if __name__ == '__main__':
-    # Default host
-    host = "127.0.0.1"
-
     # Extract the LR.pickle file if not already extracted
     extract_lr()
 
     # Check if the user defined a host as an env variable
-    if 'HOST' in os.environ:
-        host = os.environ.get('HOST')
 
-    # Check if the user defined a host as an argument
-    if len(sys.argv) == 2:
-        host = sys.argv[1]
-
-    # Allow for alternate host in Dockerfile
-    # if host is 127.0.0.1 assume user is running on windows
-    # if host is 0.0.0.0 assume user is running in Linux (Docker)
-    if host == "127.0.0.1":
-        os.environ['ENVIRONMENT'] = "Windows"
-    else:
-        os.environ['ENVIRONMENT'] = "Linux"
-
-    # Check if user defined a config file
-    # if not the user can define the env variables manually
-    data = find_conf_files()
-    print("ENV - >" + os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
-    if data is not None:
-        os.environ['INSTANCE_NAME'] = data['instance_name']
-        os.environ['BUCKET_NAME'] = data['bucket_name']
-        os.environ['SQL_HOST'] = data['SQL_HOST']
-        os.environ['SQL_USER'] = data['SQL_USER']
-        os.environ['SQL_PASSWORD'] = data['SQL_PASSWORD']
-        os.environ['SQL_DB'] = data['SQL_DB']
-        sql_proxy_run()
-
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = get_cred_path(host)
     create_bk()
 
-    app.run(host=host, port=8080, debug=True)
+    app.run(host=HOST, port=8080, debug=True)
 
 
