@@ -136,12 +136,7 @@ def response():
                 if request.form['Response'] == "Not Happy":
                     query += "WHERE Response=0 "
             data = sql_to_string(query + "order by id desc")
-            sheet = pyexcel.get_sheet(file_type="csv", file_content=data)
-            sheet.save_as(filename=request.form['Name'] + ".csv")
-            ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-            tmp_path = os.path.join(ROOT_DIR, request.form['Name'] + ".csv")
-            upload_file(request.form['Name'] + ".csv", tmp_path)
-            os.remove(tmp_path)
+            upload_file(request.form['Name'] + ".csv", data)
 
     r1 = ""
     r2 = ""

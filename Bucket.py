@@ -24,14 +24,18 @@ def create_bk():
         return False
 
 
-def upload_file(path, name):
+def upload_file(name, path):
     try:
         storage_client = storage.Client()
         storage_client.from_service_account_json(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
         bucket = storage_client.bucket(os.environ.get('BUCKET_NAME'))
 
-        blob = bucket.blob(path)
-        blob.upload_from_filename(name)
+        blob = bucket.blob(name)
+        # blob.upload_from_filename(path)
+        blob.upload_from_string(
+            data=path,
+            content_type='text/csv'
+        )
         return True
     except Exception as e:
         print("Unable to upload file -> ".format(e))
