@@ -29,7 +29,7 @@ def find_conf_files():
             if os.path.isfile(path2):
                 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path2
                 GOOGLE_APPLICATION_CREDENTIALS = path2
-                jsonpath = os.path.join("config", "credentials.json")
+                jsonpath = os.path.join("config", "hotelreviews.conf")
                 with open(jsonpath) as f:
                     return json.load(f)
         print("ERROR - Files not found")
