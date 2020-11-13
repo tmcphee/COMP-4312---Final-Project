@@ -9,7 +9,7 @@ import signal
 import datetime
 import sys
 import json
-from model import predict, pridict_preload_model
+from model import predict, pridict_preload_model, preload_model
 from SQL import *
 from Bucket import *
 from zipfile import ZipFile
@@ -244,6 +244,7 @@ def extract_lr():
 if __name__ == '__main__':
     # Extract the LR.pickle file if not already extracted
     extract_lr()
+    preload_model()
 
     # Check if the user defined a host as an env variable
 

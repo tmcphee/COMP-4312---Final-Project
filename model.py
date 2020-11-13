@@ -179,9 +179,6 @@ def pridict_preload_model(sent):
     return label, prob
 
 
-preload_model()
-
-
 if __name__ == '__main__':
     """
     python baselines.py --train_file /media/data/langID/small_scale/train.csv --dev_file /media/data/langID/small_scale/dev.csv --test_file /media/data/langID/small_scale/test.csv --model_name ./results/small.NB.m --ml_cls NB
