@@ -11,8 +11,6 @@ proxy_started = False
 
 def sql_connect():
     global connection
-    print("SQL CON - > " + SQL_HOST + " ** " +
-          SQL_USER + " ** " + SQL_PASSWORD + " ** " + SQL_DB)
     try:
         connection = pymysql.connect(host=SQL_HOST,
                                      user=SQL_USER,
@@ -47,8 +45,7 @@ def sql_format_response(content):
 
 def startproxy():
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    print("IN: " + INSTANCE_NAME)
-    print("GAC: " + GOOGLE_APPLICATION_CREDENTIALS)
+
     if ENVIRONMENT == "Windows":
         proxypath = os.path.join(ROOT_DIR, "cloud_sql_proxy.exe")
         subprocess.Popen(proxypath + " -instances=" + INSTANCE_NAME + "=tcp:3306 -credential_file=" + GOOGLE_APPLICATION_CREDENTIALS + " &")

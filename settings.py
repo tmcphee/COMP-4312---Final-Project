@@ -59,7 +59,6 @@ else:
 # if not the user can define the env variables manually
 data = find_conf_files()
 if data is not None:
-    print(data)
     INSTANCE_NAME = data['INSTANCE_NAME']
     BUCKET_NAME = data['BUCKET_NAME']
     SQL_HOST = data['SQL_HOST']

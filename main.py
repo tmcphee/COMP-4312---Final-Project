@@ -9,7 +9,7 @@ import signal
 import datetime
 import sys
 import json
-from model import predict
+from model import predict, pridict_preload_model
 from SQL import *
 from Bucket import *
 from zipfile import ZipFile
@@ -158,13 +158,14 @@ def run():
     if request.method == 'POST':
         content = request.form['input']
         # ---------------Machine-Learning-Here---------------
-        parent_path = os.path.dirname(os.path.abspath(__file__))
-        ml_path = os.path.join(parent_path, "Dataset", "LR.pickle")
-        result, prob = predict(content, ml_path)
+        # parent_path = os.path.dirname(os.path.abspath(__file__))
+        # ml_path = os.path.join(parent_path, "Dataset", "LR.pickle")
+        # result, prob = predict(content, ml_path)
+        result, prob = pridict_preload_model(content)
         # ---------------------------------------------------
         result = result_conv(result)
         sql_insert("INSERT INTO Reviews (Description, Response) "
-                   "VALUES ('" + content + "', " + str(happy_not_toint(result)) + ")")
+                   "VALUES ('" + content.replace("'", "''") + "', " + str(happy_not_toint(result)) + ")")
         result = "Result: " + result
 
     table = make_table("SELECT * FROM Reviews order by id desc LIMIT 3")

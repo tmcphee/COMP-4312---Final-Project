@@ -51,21 +51,11 @@ def download_file(path, name):
     blob = bucket.blob(path)
     blob.download_to_filename(name)
 
-'''
-def get_signed_url():
-    storage_client = storage.Client()
-    storage_client.from_service_account_json(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-    bucket = storage_client.bucket(os.environ['BUCKET_NAME'])
-
-    file = bucket.file()
-'''
-
 
 def list_files():
     blob_names = []
     storage_client = storage.Client()
     storage_client.from_service_account_json(GOOGLE_APPLICATION_CREDENTIALS)
-    print(os.environ.get(GOOGLE_APPLICATION_CREDENTIALS))
     blobs = storage_client.list_blobs(BUCKET_NAME)
 
     for blob in blobs:

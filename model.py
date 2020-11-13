@@ -23,6 +23,8 @@ from sklearn.model_selection import GridSearchCV, PredefinedSplit
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, HashingVectorizer
 from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
 
+pre_model = None
+
 
 def pkl_write(data, filename='data.pickle'):
     with open(filename, 'wb') as f:
@@ -162,6 +164,22 @@ def predict(sent, model_name):
     print("- Inference...")
     print("\t+ %s with p=%.4f" % (label, prob))
     return label, prob
+
+
+def preload_model():
+    global pre_model
+    parent_path = os.path.dirname(os.path.abspath(__file__))
+    ml_path = os.path.join(parent_path, "Dataset", "LR.pickle")
+    pre_model = load(ml_path)
+
+
+def pridict_preload_model(sent):
+    label = pre_model.predict([sent]).tolist()[0]
+    prob = pre_model.predict_proba([sent]).max()
+    return label, prob
+
+
+preload_model()
 
 
 if __name__ == '__main__':
