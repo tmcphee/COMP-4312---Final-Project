@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hotelreviews
+  name: hotelreviews
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hotelreviews
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hotelreviews
+    spec:
+      containers:
+        - image: >-
+            gcr.io/hotel-reviews-294715/github.com/tmcphee/comp-4312---final-project
+          imagePullPolicy: IfNotPresent
+          name: static-site
+---
+apiVersion: v1
+kind: Service
+metadata:
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: hotelreviews
+  name: hotelreviews-serv
+  namespace: default
+spec:
+  clusterIP: 10.8.0.48
+  externalTrafficPolicy: Cluster
+  ports:
+    - nodePort: 31088
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: hotelreviews
+  sessionAffinity: None
+  type: LoadBalancer
