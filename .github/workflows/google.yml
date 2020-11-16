@@ -20,7 +20,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
   GKE_ZONE: us-central1-c   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: hotelreviews # TODO: update to deployment name
+  DEPLOYMENT_NAME: hotelreviews-kubernetes # TODO: update to deployment name
   IMAGE: static-site
 
 jobs:
@@ -70,7 +70,7 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        kubectl create deployment hotelreviews --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+        kubectl create deployment $DEPLOYMENT_NAME --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
         kubectl scale deployment $GKE_CLUSTER --replicas=3
         kubectl autoscale deployment  --cpu-percent=80 --min=1 --max=5
         kubectl expose deployment $GKE_CLUSTER --name=$GKE_CLUSTER-service --type=LoadBalancer --port 80 --target-port 8080
