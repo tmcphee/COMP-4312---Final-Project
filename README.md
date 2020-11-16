@@ -44,6 +44,22 @@ The configuration can be defined using ENV Variables
   SQL_DB: "hotel_reviews"
 ```
 
+###### Optonal:
+Generate credentials.json from ENV variables
+```
+  GOOGLE_CRED_ENV: Create
+  type VALUE-HERE
+  project_id VALUE-HERE
+  private_key_id VALUE-HERE
+  private_key VALUE-HERE
+  client_email VALUE-HERE
+  client_id VALUE-HERE
+  auth_uri VALUE-HERE
+  token_uri VALUE-HERE
+  auth_provider_x509_cert_url VALUE-HERE
+  client_x509_cert_url VALUE-HERE
+```
+
 If the host is `0.0.0.0` then the system assumes the service is running via Linux. 
 If the host is `127.0.0.1` then the system assumes the service is running via Windows
 
