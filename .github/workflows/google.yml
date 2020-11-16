@@ -71,7 +71,7 @@ jobs:
     - name: Deploy
       run: |-
         kubectl create deployment $DEPLOYMENT_NAME --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-        kubectl scale deployment $GKE_CLUSTER --replicas=3
+        kubectl scale deployment $DEPLOYMENT_NAME --replicas=3
         kubectl autoscale deployment  --cpu-percent=80 --min=1 --max=5
-        kubectl expose deployment $GKE_CLUSTER --name=$GKE_CLUSTER-service --type=LoadBalancer --port 80 --target-port 8080
+        kubectl expose deployment $DEPLOYMENT_NAME --name=$GKE_CLUSTER-service --type=LoadBalancer --port 80 --target-port 8080
         kubectl get services -o wide
