@@ -66,7 +66,7 @@ if data is not None:
     SQL_PASSWORD = data['SQL_PASSWORD']
     SQL_DB = data['SQL_DB']
 
-if os.environ.get('GOOGLE_CRED_ENV') == "Create":
+if 'GOOGLE_CRED_ENV' in os.environ:
     google_cred = {
         'type': os.environ.get('type'),
         "project_id": os.environ.get('project_id'),
