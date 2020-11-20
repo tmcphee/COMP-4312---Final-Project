@@ -40,6 +40,23 @@
 		     </div>
 		 </div>
 		<br>
+		 <div class="card">
+		     <h5 class="card-header">Machine Learning Algorithms</h5>
+		     <div class="card-body">
+			 <p class="card-text">Using our machine learning model, our application is able to determine words that are associated with happy reviews, non-satisfied reviews, as well as language that is common in both. Our machine learning model follows the same concept of a spam filter that would find emails or SMS that are considered spam based on flagged keywords. To achieve this, we had to train the model by sorting through the hotel dataset mentioned above. Using both the non-happy responses and the happy responses we find the intersection of these two. The intersection of these two fields would be all the words that the two types of reviews have in common.</p>
+			 <p class="card-text">The words in each of the three areas are counted to determine the most popular terms. After counting the occurrences, we then can plot the data we have uncovered using word clouds. These images show which words are found most in each non-satisfied and satisfied reviews. Now that the most common words with happy and non-happy reviews have been determined, the application can estimate whether a review reflects well on the hotel or is a poor review. As you can see below, I have included the results after our ML model has ran with our dataset.</p>
+			 <img src="static\images\wordClouds.png" alt="Word Clouds" width="942" height="242">
+		     </div>
+		 </div>
+		<br>
+		<div class="card">
+		     <h5 class="card-header">Docker</h5>
+		     <div class="card-body">
+			 <p class="card-text">Our project uses Docker to containerize our application to allow for easy deployments with Google Compute Engine and Kubernetes. Using a dockerfile and a yml file, an image is able to be assembled autonomously every time our GitHub page is altered. The dockerfile installs all the python requirements, installs wget, uses wget to download the Linux Cloud SQL Proxy, copies the project files over, unzips the project, and finally runs our main python file. Since our project is too large for GitHub we are required to compress our application, and extract it in this dockerfile. </p>
+			 <p class="card-text">The docker.yml file is responsible for logging into docker, building the new docker image, then pushing the image to Docker Hub on Tyler McPhee’s docker account. This image can then be used to deploy on Google Compute Engine. With Kubernetes, the change is auto-recognized after a few minutes, a new pod is created with the updated application and set to the current pod. We run docker with the following command: docker run --name=Hotel-Review-Analyzer -d -p 8080:8080 -v /path/to/config:/config:rw tmcphee/hotelreviews</p>
+		     </div>
+		 </div>
+		<br>
 
 		<br>
 	     </div>
