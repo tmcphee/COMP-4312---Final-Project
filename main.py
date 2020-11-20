@@ -15,6 +15,7 @@ from Bucket import *
 from zipfile import ZipFile
 from settings import *
 
+RUN_COUNT = 0
 
 # define the app
 DebuggingOn = bool(os.getenv('DEBUG', False))  # Whether the Flask app is run in debugging mode, or not.
@@ -245,11 +246,9 @@ if __name__ == '__main__':
     # Extract the LR.pickle file if not already extracted
     extract_lr()
     preload_model()
-
-    # Check if the user defined a host as an env variable
-
+    sql_proxy_run()
+    sql_insert("CREATE TABLE Reviews(id int NOT NULL AUTO_INCREMENT, Description BLOB NOT NULL, Response int(1) NOT NULL, PRIMARY KEY (id))")
     create_bk()
-
     app.run(host=HOST, port=8080, debug=True)
 
 

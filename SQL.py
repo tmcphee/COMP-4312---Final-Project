@@ -19,15 +19,13 @@ def sql_connect():
                                      user=SQL_USER,
                                      password=SQL_PASSWORD,
                                      db=SQL_DB)
-        SQL_INITIAL_CONNECT = True
     except Exception as e:
         print("SQL CONNECTION ERROR - Exeception occured:{}".format(e))
 
 
 def startproxy():
-    global proxy_instance
+    global proxy_instance, SQL_INITIAL_CONNECT
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-
     if ENVIRONMENT == "Windows":
         proxypath = os.path.join(ROOT_DIR, "cloud_sql_proxy.exe")
         proxy_instance = subprocess.Popen(proxypath + " -instances=" + INSTANCE_NAME + "=tcp:3306 -credential_file=" + GOOGLE_APPLICATION_CREDENTIALS + " &")
@@ -38,6 +36,7 @@ def startproxy():
                          shell=True)
         proxy_instance
         print("Using Linux style SQL Proxy")
+    SQL_INITIAL_CONNECT = True
 
 
 def sql_proxy_run():
@@ -57,7 +56,7 @@ def redial_sql():
         if proxy_instance != None:
             print("KILLING OLD CONNECTION TO SQL PROXY...")
             try:
-                os.kill(os.getpgid(proxy_instance.pid), signal.SIGTERM)
+                os.kill(proxy_instance.pid, signal.SIGTERM)
             except Exception as e:
                 print(e)
         print("REDIALING CONNECTION TO SQL PROXY...")
@@ -97,9 +96,9 @@ def sql_format_response(content):
 
 
 
-sql_proxy_run()
+#
 #sql_insert("DROP TABLE Reviews")
-sql_insert("CREATE TABLE Reviews(id int NOT NULL AUTO_INCREMENT, Description BLOB NOT NULL, Response int(1) NOT NULL, PRIMARY KEY (id))")
+
 
 
 #TEST CASES
