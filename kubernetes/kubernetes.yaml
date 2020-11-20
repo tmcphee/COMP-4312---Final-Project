@@ -25,6 +25,12 @@ spec:
             gcr.io/hotel-reviews-294715/github.com/tmcphee/comp-4312---final-project
           imagePullPolicy: IfNotPresent
           name: static-site
+          volumeMounts:
+            - mountPath: /config
+              name: config-disk
+      volumes:
+        - name: config-disk
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
