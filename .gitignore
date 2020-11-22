@@ -2,8 +2,8 @@
 Dataset/LR.pickle
 
 #sql
-credentials.json
-hotelreviews.conf
+test/credentials.json
+test/hotelreviews.conf
 
 # pycharm
 .idea/

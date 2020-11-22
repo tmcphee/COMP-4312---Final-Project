@@ -3,33 +3,49 @@ import os
 import sys
 
 HOST = "127.0.0.1"
-ENVIRONMENT = os.environ.get('INSTANCE_NAME')
-INSTANCE_NAME = os.environ.get('INSTANCE_NAME')
-BUCKET_NAME = os.environ.get('BUCKET_NAME')
-SQL_HOST = os.environ.get('SQL_HOST')
-SQL_USER = os.environ.get('SQL_USER')
-SQL_PASSWORD = os.environ.get('SQL_PASSWORD')
-SQL_DB = os.environ.get('SQL_DB')
-GOOGLE_APPLICATION_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+INSTANCE_NAME = "comp4312-0670448:us-central1:hotel-reviews"
+BUCKET_NAME = "comp4312_hotel_reviews"
+SQL_HOST = "127.0.0.1"
+SQL_USER = "root"
+SQL_PASSWORD = "comp4312admin"
+SQL_DB = "hotel_reviews"
+GOOGLE_APPLICATION_CREDENTIALS = "credentials.json"
+
+if 'ENVIRONMENT' in os.environ:
+    ENVIRONMENT = os.environ.get('ENVIRONMENT')
+if 'INSTANCE_NAME' in os.environ:
+    INSTANCE_NAME = os.environ.get('INSTANCE_NAME')
+if 'BUCKET_NAME' in os.environ:
+    BUCKET_NAME = os.environ.get('BUCKET_NAME')
+if 'SQL_HOST' in os.environ:
+    SQL_HOST = os.environ.get('SQL_HOST')
+if 'SQL_USER' in os.environ:
+    SQL_USER = os.environ.get('SQL_USER')
+if 'SQL_PASSWORD' in os.environ:
+    SQL_PASSWORD = os.environ.get('SQL_PASSWORD')
+if 'SQL_DB' in os.environ:
+    SQL_DB = os.environ.get('SQL_DB')
+if 'GOOGLE_APPLICATION_CREDENTIALS' in os.environ:
+    GOOGLE_APPLICATION_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
 
 def find_conf_files():
     global GOOGLE_APPLICATION_CREDENTIALS
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     try:
-        path1 = os.path.join(ROOT_DIR, "credentials.json")
+        path1 = os.path.join(ROOT_DIR, "test/credentials.json")
         if os.path.isfile(path1):
             os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path1
             GOOGLE_APPLICATION_CREDENTIALS = path1
-            jsonpath = os.path.join(ROOT_DIR, "hotelreviews.conf")
+            jsonpath = os.path.join(ROOT_DIR, "test/hotelreviews.conf")
             with open(jsonpath) as f:
                 return json.load(f)
         else:
-            path2 = os.path.join("config", "credentials.json")
+            path2 = os.path.join("config", "test/credentials.json")
             if os.path.isfile(path2):
                 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path2
                 GOOGLE_APPLICATION_CREDENTIALS = path2
-                jsonpath = os.path.join("config", "hotelreviews.conf")
+                jsonpath = os.path.join("config", "test/hotelreviews.conf")
                 with open(jsonpath) as f:
                     return json.load(f)
         print("ERROR - Files not found")
@@ -80,6 +96,6 @@ if 'GOOGLE_CRED_ENV' in os.environ:
         "client_x509_cert_url": os.environ.get('client_x509_cert_url')
     }
     GOOGLE_APPLICATION_CREDENTIALS = "credentials.json"
-    with open('credentials.json', 'w') as f:  # writing JSON object
+    with open('test/credentials.json', 'w') as f:  # writing JSON object
         json.dump(google_cred, f)
 
